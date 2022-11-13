@@ -1,0 +1,5 @@
+*.identcache
+*.dproj.local
+*.dsk
+*.dcu
+*.~*~
