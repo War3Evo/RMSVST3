@@ -7,7 +7,9 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls,  Vcl.StdCtrls;
 
 
-type  TOnKeyEvent = procedure (Sender:TObject;key:integer;_on,infinite:boolean) of object;
+type
+  TOnKeyEvent = procedure (Sender:TObject;key:integer;_on,infinite:boolean) of object;
+
   TRMCKeyboard = class (TGraphicControl)
     procedure Paint;override;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
@@ -36,7 +38,9 @@ type  TOnKeyEvent = procedure (Sender:TObject;key:integer;_on,infinite:boolean) 
     function xoffset(key: integer): integer;
   public
     constructor Create(owner:TComponent); override;
-    procedure SetKeyPressed(key:integer;_on:boolean);
+    procedure SetKeyPressed(key:integer;_on:boolean);  // no sound
+    procedure KeySoundOnly(key:integer;_on:boolean);       // sound only
+    procedure PressKey(key:integer;_on:boolean);       // sound and highlight
   published
     property OnKeyEvent:TOnkeyEvent read FOnKeyEvent write FOnKeyEvent;
     property Octaves: integer read FOctaves write SetOctaves;
@@ -61,15 +65,26 @@ end;
 const blackkey:array[0..4] of integer = (1,3,6,8,10);
 const whitekey:array[0..7] of integer = (0,2,4,5,7,9,11,12);
 
+procedure TRMCKeyboard.PressKey(key:integer;_on:boolean);             // Key pressed highlight and sound
+begin
+  SetKeyPressed(key,_on);
+  SetKey(key,_on);
+end;
+
+procedure TRMCKeyboard.KeySoundOnly(key:integer;_on:boolean);             // sound only
+begin
+  SetKey(key,_on);
+end;
+
 procedure TRMCKeyboard.SetKey(key:integer;_on:boolean;infinite:boolean);
 begin
   FSelected[key]:=_on;
-  if assigned(OnKeyEvent) then
-    OnKeyEvent(self,key+LowerKey,_on,infinite and _on);
+  if assigned(FOnKeyEvent) then
+    FOnKeyEvent(self,key+LowerKey,_on,infinite and _on);
   Invalidate;
 end;
 
-procedure TRMCKeyboard.SetKeyPressed(key: integer; _on: boolean);
+procedure TRMCKeyboard.SetKeyPressed(key: integer; _on: boolean);      // highlight key pressed
 begin
   dec(key,LowerKey);
   if (key>=0) and (key<=12*octaves) then

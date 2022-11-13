@@ -61,6 +61,7 @@ object FormAthenaVST: TFormAthenaVST
     Top = 0
     Width = 1100
     Height = 106
+    OnKeyEvent = FkeyboardKeyEvent
     Octaves = 5
     Align = alTop
     ExplicitLeft = 64
@@ -111,5 +112,15 @@ object FormAthenaVST: TFormAthenaVST
     Caption = 'Set Prgm 1'
     TabOrder = 3
     OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 160
+    Top = 232
+    Width = 177
+    Height = 129
+    Caption = 'C Chord'
+    TabOrder = 4
+    OnMouseDown = Button2MouseDown
+    OnMouseUp = Button2MouseUp
   end
 end
