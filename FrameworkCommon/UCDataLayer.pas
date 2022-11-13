@@ -21,7 +21,7 @@ end;
 
 implementation
 
-uses SysUtils, ULogger;      // Not everyone has CodeSiteLogging (removed)
+uses SysUtils, ULogger;
 
 procedure RemoveSection(data:TStringList;sectionname:string);
 VAR i, istart,istop:integer;
