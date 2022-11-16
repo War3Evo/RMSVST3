@@ -2,11 +2,20 @@ unit UCPlugView;
 
 interface
 
-uses Vst3Base, FMX.Forms, UVST3Controller, System.Types;
+uses
+{$IFDEF MSWINDOWS}
+      //FMX.Platform.Win,
+      FMX.Controls.Win,
+{$ENDIF}
+      Vst3Base, FMX.Forms, UVST3Controller, System.Types;
 
 type
      CPlugView = class(TInterfacedObject,IPlugView)
+{$IFDEF MSWINDOWS}
+     FEditorForm:TWinControl;
+{$ELSE}
      FEditorForm:TForm;
+{$ENDIF}
      FFrame: IPlugFrame;
 public
       IVST3:IVST3Controller;
@@ -57,6 +66,7 @@ uses ULogger, UVST3Utils, System.SysUtils;
 
 function CPlugView.Attached(parent: pointer; aType: FIDString): TResult;
 var rect: TViewRect;
+    ARect: TRectF;
 begin
   WriteLog('CPlugView.Attached');
   result:=kResultFalse;
@@ -64,13 +74,14 @@ begin
   if FeditorForm = NIL then
     FeditorForm:=IVST3.CreateForm(parent);
   if FeditorForm<>NIL then
+    FEditorForm.InvalidateRect(ARect);
   with FEditorForm do
   begin
     Visible := True;
-    BorderStyle := None;
-    SetBounds(0, 0, Width, Height);
-    rect.left:= 0; rect.top:= 0; rect.right:= Width; rect.bottom:= Height;
-    Invalidate;
+    //BorderStyle := None;
+    SetBounds(0, 0, Round(Width), Round(Height));
+    ARect.left:= 0; ARect.top:= 0; ARect.right:= Width; ARect.bottom:= Height;
+    InvalidateRect(ARect);
   end;
   IVST3.EditOpen(FEditorForm);
   if FFrame<>nil then
@@ -93,8 +104,8 @@ begin
   rect.bottom:=800;
   if FeditorForm<>NIL then with FeditorForm do
   begin
-    rect^.right:=width;
-    rect^.bottom:=height;
+    rect^.right:=Round(width);
+    rect^.bottom:=Round(height);
   end;
   result:=kResultOk;
 end;
@@ -114,11 +125,8 @@ begin
   size.top:=0;
   size.right:=1000;
   size.bottom:=800;
-  if FeditorForm<>NIL then with FeditorForm do
-  begin
-    size.right:=width;
-    size.bottom:=height;
-  end;
+  if FeditorForm<>NIL then
+      FeditorForm.SetBounds(size.left,size.top,size.right,size.bottom);
   result:=kResultOk;
 end;
 

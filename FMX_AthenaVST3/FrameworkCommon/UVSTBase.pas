@@ -3,7 +3,12 @@ unit UVSTBase;
 interface
 
 //uses Forms,  Generics.Collections; ---> VCL
-uses FMX.Forms, System.Generics.Collections;
+uses
+{$IFDEF MSWINDOWS}
+      //FMX.Platform.Win,
+      FMX.Controls.Win,
+{$ENDIF}
+    FMX.Forms, System.Generics.Collections;
 
 type PSingle           = ^single;
      PPSingle          = ^PSingle;
@@ -20,7 +25,11 @@ type
                               vst3id:TGUID;
                               vst2id:string; // must be 4 characters;
                               cl  : TVSTInstrumentClass;
-                              ecl :  TFormClass;
+{$IFDEF MSWINDOWS}
+                              ecl :  TWinControl;  // was TForm
+{$ELSE}
+                              ecl :  TForm;
+{$ENDIF}
                               name:string;
                               isSynth,softMidiThru:boolean;
                             end;

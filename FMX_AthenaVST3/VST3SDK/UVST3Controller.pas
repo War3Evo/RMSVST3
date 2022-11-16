@@ -2,7 +2,13 @@ unit UVST3Controller;
 
 interface
 
-uses FMX.Forms, UVST3Processor, Vst3Base, UVSTBase, UCDataLayer, System.Generics.Collections, FMX.ExtCtrls, System.Types, FMX.Types;
+uses
+{$IFDEF MSWINDOWS}
+      //FMX.Platform.Win,
+      FMX.Controls.Win,
+{$ENDIF}
+      FMX.Forms, UVST3Processor, Vst3Base, UVSTBase, UCDataLayer,
+      System.Generics.Collections, FMX.ExtCtrls, System.Types, FMX.Types;
 
 const PROGRAMCOUNT = 16;
 const IDPARMProgram = 4788;
@@ -34,8 +40,17 @@ type TVST3Parameter  = record
                     end;
 
  IVST3Controller = interface
+{$IFDEF MSWINDOWS}
+        function CreateForm(parent:pointer):TWinControl;
+{$ELSE}
         function CreateForm(parent:pointer):Tform;
+{$ENDIF}
+
+{$IFDEF MSWINDOWS}
+        procedure EditOpen(form:TWinControl);
+{$ELSE}
         procedure EditOpen(form:TForm);
+{$ENDIF}
         procedure EditClose;
         procedure OnSize(newSize: TRect);
         function GetParameterCount:integer;
@@ -60,7 +75,11 @@ type TVST3Parameter  = record
         FCurProgram:integer;
         FPrograms: TList<TVST3Program>;
         Fparameters:TVST3ParameterArray;
+{$IFDEF MSWINDOWS}
+        FeditorForm:TWinControl;
+{$ELSE}
         FeditorForm:TForm;
+{$ENDIF}
         FnumUserParameters:integer;
         FInitialized,fFinalized:boolean;
         FProcessorHandler:IProcessorHandler;
@@ -70,8 +89,16 @@ type TVST3Parameter  = record
         procedure saveCurrentToProgram(prgm:integer);
         procedure SetProgram(prgm:integer;saveCurrent:boolean;updateProcessor:boolean);
         function ParmLookup(id: integer): integer;
+{$IFDEF MSWINDOWS}
+        function CreateForm(parent:pointer):TWinControl;
+{$ELSE}
         function CreateForm(parent:pointer):Tform;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+        procedure EditOpen(form:TWinControl);
+{$ELSE}
         procedure EditOpen(form:TForm);
+{$ENDIF}
         procedure EditClose;
         function GetParameterCount:integer;
         function GetParameterInfo(paramIndex: integer;VAR info: TParameterInfo):boolean;
@@ -104,10 +131,14 @@ type TVST3Parameter  = record
         procedure AddParameter(id:integer;title,shorttitle,units:string;min,max,val:double;automate:boolean=true;steps:integer=0;ProgramChange:boolean=false);
         procedure ResendParameters;
         procedure UpdateHostParameter(id:integer;value:double);
+{$IFDEF MSWINDOWS}
+        property  EditorForm: TWinControl read FEditorForm;
+{$ELSE}
         property  EditorForm: TForm read FEditorForm;
+{$ENDIF}
         function getParameterAsString(id: integer; value: double): string; virtual;
         procedure OnProgramChange(prgm:integer);virtual;
-        function  GetEditorClass: TFormClass;virtual;
+        function  GetEditorClass: TWinControl;virtual;
         function GetMidiOutputEvents:TArray<integer>;override;final;
         procedure OnEditOpen;virtual;
         procedure OnEditClose;virtual;
@@ -296,19 +327,27 @@ begin
   result:=length(Fparameters);
 end;
 
-function TVST3Controller.GetEditorClass:TFormClass;
+{$IFDEF MSWINDOWS}
+function TVST3Controller.GetEditorClass:TWinControl;
 begin
   result:=NIL;
 end;
+{$ELSE}
+  // other platform for above
+{$ENDIF}
 
-function TVST3Controller.CreateForm(parent:pointer):TForm;
-VAR FeditorFormClass:TFormClass;
+{$IFDEF MSWINDOWS}
+function TVST3Controller.CreateForm(parent:pointer):TWinControl;
+VAR FeditorFormClass:TWinControl;
 begin
   FeditorFormClass:=GetEditorClass;
   if FeditorFormClass = NIL then FeditorFormClass:=GetPluginInfo.PluginDef.ecl;
   if FeditorFormClass = NIL then result:=NIL
   else result:=FeditorFormClass.CreateParented(HWND(parent));
 end;
+{$ELSE}
+  // other platform for above
+{$ENDIF}
 
 function TVST3Controller.GetParameterInfo(paramIndex: integer; var info: TParameterInfo): boolean;
 begin
@@ -400,6 +439,15 @@ begin
   FeditorForm:=NIL;
 end;
 
+{$IFDEF MSWINDOWS}
+procedure TVST3Controller.EditOpen(form: TWinControl);
+begin
+  FeditorForm:=form;
+  OnEditOpen;
+  SetIdleTimer(true);
+  ResendParameters;
+end;
+{$ELSE}
 procedure TVST3Controller.EditOpen(form: TForm);
 begin
   FeditorForm:=form;
@@ -407,6 +455,7 @@ begin
   SetIdleTimer(true);
   ResendParameters;
 end;
+{$ENDIF}
 
 procedure TVST3Controller.ResendParameters;
 VAR i,id,count:integer;
