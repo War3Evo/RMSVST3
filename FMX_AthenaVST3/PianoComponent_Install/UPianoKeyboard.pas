@@ -5,8 +5,6 @@ interface
 uses
   System.SysUtils, System.Classes, System.UITypes, System.Types,
   FMX.Controls, FMX.Graphics;
-// Implicitly imported:
-  //FMX.Types, FMX.Platform, FMX.Clipboard, FMX.Forms;
 
 type
   TOnKeyEvent = procedure (Sender:TObject;key:integer;_on,infinite:boolean) of object;
@@ -38,7 +36,8 @@ type
     procedure SetKey(key: integer; _on: boolean;infinite:boolean=false);
     function xoffset(key: integer): integer;
   public
-    constructor Create(owner:TComponent); override;
+    constructor Create(AOwner:TComponent); override;
+    destructor Destroy; override;
     procedure SetKeyPressed(key:integer;_on:boolean);  // no sound
     procedure KeySoundOnly(key:integer;_on:boolean);       // sound only
     procedure PressKey(key:integer;_on:boolean);       // sound and highlight
@@ -65,6 +64,11 @@ end;
 
 const blackkey:array[0..4] of integer = (1,3,6,8,10);
 const whitekey:array[0..7] of integer = (0,2,4,5,7,9,11,12);
+
+destructor TRMCKeyboard.Destroy;
+begin
+  inherited;
+end;
 
 procedure TRMCKeyboard.PressKey(key:integer;_on:boolean);             // Key pressed highlight and sound
 begin
@@ -199,7 +203,7 @@ begin
   result:=12*(5-Octaves DIV 2);
 end;
 
-constructor TRMCKeyboard.Create(owner: TComponent);
+constructor TRMCKeyboard.Create(AOwner: TComponent);
 begin
   inherited;
   OnMouseEnter:=MyMouseEnter;
@@ -216,11 +220,11 @@ begin
   Canvas.Stroke.Kind := FMX.Graphics.TBrushKind.Solid;           // TBrushKind requires FMX.Graphics
   Canvas.Stroke.Thickness := 1;
   case selected of
-    0: Canvas.Stroke.Color := TAlphaColorRec.Black; //clBlack;
-    1: Canvas.Stroke.Color := TAlphaColorRec.Lightgray; //clLtGray;
-    2: Canvas.Stroke.Color := TAlphaColorRec.Darkgray; //clDkGray;
+    0: Canvas.Fill.Color := TAlphaColorRec.Black; //clBlack;
+    1: Canvas.Fill.Color := TAlphaColorRec.Lightgray; //clLtGray;
+    2: Canvas.Fill.Color := TAlphaColorRec.Darkgray; //clDkGray;
   end;
-  Canvas.DrawRect(GetBlackRect(octave,index),100);
+  Canvas.FillRect(GetBlackRect(octave,index),100);
 end;
 
 procedure TRMCKeyboard.DrawWhiteKey(octave,index:integer;selected:integer);
@@ -242,10 +246,11 @@ begin
   Canvas.Stroke.Kind := FMX.Graphics.TBrushKind.Solid;           // TBrushKind requires FMX.Graphics
   Canvas.Stroke.Thickness := 1;
   case selected of
-    0: Canvas.Stroke.Color := TAlphaColorRec.Black; //clBlack;
-    1: Canvas.Stroke.Color := TAlphaColorRec.Lightgray; //clLtGray;
-    2: Canvas.Stroke.Color := TAlphaColorRec.Darkgray; //clDkGray;
+    0: Canvas.Fill.Color := TAlphaColorRec.White; //clBlack;
+    1: Canvas.Fill.Color := TAlphaColorRec.Lightgray; //clLtGray;
+    2: Canvas.Fill.Color := TAlphaColorRec.Darkgray; //clDkGray;
   end;
+  Canvas.FillRect(GetWhiteRect(octave,index),100);
   Canvas.DrawRect(GetWhiteRect(octave,index),100);
 end;
 

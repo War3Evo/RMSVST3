@@ -28,7 +28,8 @@ package PackageComponent_PianoKeyboard;
 {$IMPLICITBUILD ON}
 
 requires
-  rtl;
+  rtl,
+  fmx;
 
 contains
   UPianoKeyboard in 'UPianoKeyboard.pas';
