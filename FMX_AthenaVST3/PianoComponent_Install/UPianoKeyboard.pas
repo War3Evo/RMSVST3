@@ -229,19 +229,6 @@ end;
 
 procedure TRMCKeyboard.DrawWhiteKey(octave,index:integer;selected:integer);
 begin
-{    Canvas.Pen.Color:=clBlack;
-    Canvas.Pen.Style:=psSolid;
-    Canvas.Pen.Width:=1;
-    Canvas.Brush.Style:=bsSolid;
-    case selected of
-      0: Canvas.Brush.Color:=clWhite;
-      1: Canvas.Brush.Color:=clDkGray;
-      2: Canvas.Brush.Color:=clLtGray;
-    end;
-
-    with GetWhiteRect(octave,index) do
-      Canvas.Rectangle(Left,Top,Right,Bottom);
-  end;}
   Canvas.Stroke.Color := TAlphaColorRec.Black;
   Canvas.Stroke.Kind := FMX.Graphics.TBrushKind.Solid;           // TBrushKind requires FMX.Graphics
   Canvas.Stroke.Thickness := 1;
