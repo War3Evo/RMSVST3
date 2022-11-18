@@ -27,7 +27,11 @@ uses
   UVST3Utils in 'VST3SDK\UVST3Utils.pas',
   UVSTInstrument in 'VST3SDK\UVSTInstrument.pas',
   Vst3Base in 'VST3SDK\Vst3Base.pas',
-  UCPlugView in 'VST3SDK\UCPlugView.pas';
+  UCPlugView in 'VST3SDK\UCPlugView.pas',
+  UAthenaVst in 'UAthenaVst.pas',
+  UAthenaVstDSP in 'UAthenaVstDSP.pas',
+  UAthenaVSTForm in 'UAthenaVSTForm.pas' {Form1},
+  UPianoKeyboard in 'PianoComponent_Install\UPianoKeyboard.pas';
 
 {$R *.res}
 
