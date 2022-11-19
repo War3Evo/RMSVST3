@@ -11,11 +11,7 @@ uses
 
 type
      CPlugView = class(TInterfacedObject,IPlugView)
-{$IFDEF MSWINDOWS}
-     FEditorForm:TWinControl;
-{$ELSE}
      FEditorForm:TForm;
-{$ENDIF}
      FFrame: IPlugFrame;
 public
       IVST3:IVST3Controller;
@@ -66,27 +62,38 @@ uses ULogger, UVST3Utils, System.SysUtils;
 
 function CPlugView.Attached(parent: pointer; aType: FIDString): TResult;
 var rect: TViewRect;
-    ARect: TRectF;
+    //ARect: TRectF;
 begin
   WriteLog('CPlugView.Attached');
   result:=kResultFalse;
   if parent=NIL then exit;
   if FeditorForm = NIL then
-    FeditorForm:=IVST3.CreateForm(parent);
+    begin
+      WriteLog('BEFORE:FeditorForm:=IVST3.CreateForm(parent)');
+      FeditorForm:=IVST3.CreateForm(parent);
+      WriteLog('AFTER:FeditorForm:=IVST3.CreateForm(parent)');
+    end;
   if FeditorForm<>NIL then
-    FEditorForm.InvalidateRect(ARect);
+    FEditorForm.Invalidate;  //InvalidateRect(ARect);
   with FEditorForm do
   begin
     Visible := True;
     //BorderStyle := None;
-    SetBounds(0, 0, Round(Width), Round(Height));
-    ARect.left:= 0; ARect.top:= 0; ARect.right:= Width; ARect.bottom:= Height;
-    InvalidateRect(ARect);
+    //SetBounds(0, 0, Round(Width), Round(Height));
+    //ARect.left:= 0; ARect.top:= 0; ARect.right:= Width; ARect.bottom:= Height;
+    Invalidate;
   end;
+  WriteLog('BEFORE:IVST3.EditOpen(FEditorForm)');
   IVST3.EditOpen(FEditorForm);
+  WriteLog('AFTER:IVST3.EditOpen(FEditorForm)');
   if FFrame<>nil then
-    FFrame.resizeView (self, @rect);
+    begin
+      WriteLog('BEFORE:FFrame.resizeView (self, @rect);');
+      FFrame.resizeView (self, @rect);
+      WriteLog('AFTER:FFrame.resizeView (self, @rect);');
+    end;
   result:=kResultOk;
+  WriteLog('CPlugView.Attached result:=kResultOk; end;');
 end;
 
 function CPlugView.CanResize: TResult;

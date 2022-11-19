@@ -6,6 +6,7 @@ uses
 {$IFDEF MSWINDOWS}
       //FMX.Platform.Win,
       FMX.Controls.Win,
+      FMX.Platform.Win,
 {$ENDIF}
       FMX.Forms, UVST3Processor, Vst3Base, UVSTBase, UCDataLayer,
       System.Generics.Collections, FMX.ExtCtrls, System.Types, FMX.Types;
@@ -40,17 +41,8 @@ type TVST3Parameter  = record
                     end;
 
  IVST3Controller = interface
-{$IFDEF MSWINDOWS}
-        function CreateForm(parent:pointer):TWinControl;
-{$ELSE}
         function CreateForm(parent:pointer):Tform;
-{$ENDIF}
-
-{$IFDEF MSWINDOWS}
-        procedure EditOpen(form:TWinControl);
-{$ELSE}
         procedure EditOpen(form:TForm);
-{$ENDIF}
         procedure EditClose;
         procedure OnSize(newSize: TRect);
         function GetParameterCount:integer;
@@ -75,11 +67,7 @@ type TVST3Parameter  = record
         FCurProgram:integer;
         FPrograms: TList<TVST3Program>;
         Fparameters:TVST3ParameterArray;
-{$IFDEF MSWINDOWS}
-        FeditorForm:TWinControl;
-{$ELSE}
         FeditorForm:TForm;
-{$ENDIF}
         FnumUserParameters:integer;
         FInitialized,fFinalized:boolean;
         FProcessorHandler:IProcessorHandler;
@@ -89,16 +77,8 @@ type TVST3Parameter  = record
         procedure saveCurrentToProgram(prgm:integer);
         procedure SetProgram(prgm:integer;saveCurrent:boolean;updateProcessor:boolean);
         function ParmLookup(id: integer): integer;
-{$IFDEF MSWINDOWS}
-        function CreateForm(parent:pointer):TWinControl;
-{$ELSE}
         function CreateForm(parent:pointer):Tform;
-{$ENDIF}
-{$IFDEF MSWINDOWS}
-        procedure EditOpen(form:TWinControl);
-{$ELSE}
         procedure EditOpen(form:TForm);
-{$ENDIF}
         procedure EditClose;
         function GetParameterCount:integer;
         function GetParameterInfo(paramIndex: integer;VAR info: TParameterInfo):boolean;
@@ -131,14 +111,10 @@ type TVST3Parameter  = record
         procedure AddParameter(id:integer;title,shorttitle,units:string;min,max,val:double;automate:boolean=true;steps:integer=0;ProgramChange:boolean=false);
         procedure ResendParameters;
         procedure UpdateHostParameter(id:integer;value:double);
-{$IFDEF MSWINDOWS}
-        property  EditorForm: TWinControl read FEditorForm;
-{$ELSE}
         property  EditorForm: TForm read FEditorForm;
-{$ENDIF}
         function getParameterAsString(id: integer; value: double): string; virtual;
         procedure OnProgramChange(prgm:integer);virtual;
-        function  GetEditorClass: TWinControl;virtual;
+        function  GetEditorClass: TFormClass;virtual;
         function GetMidiOutputEvents:TArray<integer>;override;final;
         procedure OnEditOpen;virtual;
         procedure OnEditClose;virtual;
@@ -156,7 +132,7 @@ type TVST3Parameter  = record
 
 implementation
 
-uses SysUtils,ULogger,Windows,Math, UVst3Utils;
+uses System.SysUtils, ULogger, System.Math, UVst3Utils;   //windows
 
 constructor TVST3Controller.Create;
 begin
@@ -328,7 +304,7 @@ begin
 end;
 
 {$IFDEF MSWINDOWS}
-function TVST3Controller.GetEditorClass:TWinControl;
+function TVST3Controller.GetEditorClass:TFormClass;
 begin
   result:=NIL;
 end;
@@ -337,13 +313,40 @@ end;
 {$ENDIF}
 
 {$IFDEF MSWINDOWS}
-function TVST3Controller.CreateForm(parent:pointer):TWinControl;
-VAR FeditorFormClass:TWinControl;
+function TVST3Controller.CreateForm(parent:pointer):TForm;
+VAR FeditorFormClass:TFormClass;
 begin
+  WriteLog('TVST3Controller.CreateForm');
   FeditorFormClass:=GetEditorClass;
-  if FeditorFormClass = NIL then FeditorFormClass:=GetPluginInfo.PluginDef.ecl;
-  if FeditorFormClass = NIL then result:=NIL
-  else result:=FeditorFormClass.CreateParented(HWND(parent));
+  if FeditorFormClass = NIL then
+    begin
+      WriteLog('if FeditorFormClass = NIL then');
+      FeditorFormClass:=GetPluginInfo.PluginDef.ecl;
+      WriteLog('AFTER:FeditorFormClass:=GetPluginInfo.PluginDef.ecl.Create(Nil);');
+    end;
+  if FeditorFormClass = NIL then
+    begin
+      WriteLog('if FeditorFormClass = NIL');
+      result:=NIL;
+      WriteLog('AFTER:result:=NIL');
+    end
+  else
+  begin
+    // https://www.thoughtco.com/tform-createaowner-aowner-1057563
+    {
+    * Nil specifies that no object owns the form and therefore the developer
+      is responsible for freeing the created form (by calling myForm.
+      Free when you no longer need the form)
+    * Application specifies a global TApplication type variable created
+      when you run your application. "Application" encapsulates your application
+      as well as providing many functions
+      that occur in the background of the program.
+    }
+    WriteLog('FeditorFormClass <> NIL');
+    result:=FeditorFormClass.Create(NIL);  // could try "Application"
+    WriteLog('AFTER:FeditorFormClass.Create(Application);');
+    //result:=FeditorFormClass;   //CreateParented(HWND(parent));
+  end;
 end;
 {$ELSE}
   // other platform for above
@@ -440,12 +443,17 @@ begin
 end;
 
 {$IFDEF MSWINDOWS}
-procedure TVST3Controller.EditOpen(form: TWinControl);
+procedure TVST3Controller.EditOpen(form: TForm);
 begin
+  WriteLog('TVST3Controller.EditOpen');
   FeditorForm:=form;
+  WriteLog('FeditorForm:=form;');
   OnEditOpen;
+  WriteLog('OnEditOpen;');
   SetIdleTimer(true);
+  WriteLog('SetIdleTimer(true);');
   ResendParameters;
+  WriteLog('ResendParameters;');
 end;
 {$ELSE}
 procedure TVST3Controller.EditOpen(form: TForm);
@@ -460,16 +468,35 @@ end;
 procedure TVST3Controller.ResendParameters;
 VAR i,id,count:integer;
 begin
-  if FeditorForm=NIL then exit;
+  WriteLog('TVST3Controller.ResendParameters; START');
+  if FeditorForm=NIL then
+    begin
+      WriteLog('TVST3Controller.ResendParameters: if FeditorForm=NIL then exit;');
+      exit;
+    end;
   count:=FnumUserParameters;
+  WriteLog('count:=FnumUserParameters: ' + count.ToString);
   for i:=0 to count-1 do
   begin
     id:=Fparameters[i].id;
-    if isMidiCCId(id) then continue;  // better safe than sorry
-    if id = IDPARMProgram then continue;  // better safe than sorry
+     WriteLog('id =' + Fparameters[i].id.ToString);
+    if isMidiCCId(id) then
+      begin
+        WriteLog('if isMidiCCId(id) then continue');
+        continue;  // better safe than sorry
+      end;
+    if id = IDPARMProgram then
+      begin
+        WriteLog('if id = IDPARMProgram then');
+        continue;  // better safe than sorry
+      end;
+    WriteLog('BEFORE UpdateEditorParameter(id:' + id.ToString + ',Fparameters[' + i.ToString + '].value =' + Fparameters[i].value.ToString);
     UpdateEditorParameter(id,Fparameters[i].value);
-    Fparameters[i].dirty:=false
+    WriteLog('AFTER UpdateEditorParameter(id,Fparameters[i].value);');
+    Fparameters[i].dirty:=false;
+    WriteLog('AFTER Fparameters[i].dirty:=false;');
   end;
+  WriteLog('TVST3Controller.ResendParameters; END');
 end;
 
 procedure TVST3Controller.TimerOnIdle(Sender:TObject);

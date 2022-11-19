@@ -1,15 +1,45 @@
-object Form1: TForm1
+object FormAthenaVST: TFormAthenaVST
   Left = 0
   Top = 0
-  Caption = 'Form1'
+  Caption = 'FormAthenaVST'
   ClientHeight = 480
   ClientWidth = 640
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   DesignerMasterStyle = 0
-  object RMCKeyboard1: TRMCKeyboard
+  object FKeyboard: TRMCKeyboard
     Octaves = 3
     Align = Top
+  end
+  object ScrollBar1: TScrollBar
+    Value = 50.000000000000000000
+    SmallChange = 0.000000000000000000
+    Orientation = Horizontal
+    Position.X = 56.000000000000000000
+    Position.Y = 160.000000000000000000
+    TabOrder = 1
+    OnChange = ScrollBar1Change
+  end
+  object ScrollBar2: TScrollBar
+    SmallChange = 0.000000000000000000
+    Orientation = Horizontal
+    Position.X = 56.000000000000000000
+    Position.Y = 208.000000000000000000
+    TabOrder = 3
+  end
+  object ScrollBar3: TScrollBar
+    SmallChange = 0.000000000000000000
+    Orientation = Horizontal
+    Position.X = 56.000000000000000000
+    Position.Y = 256.000000000000000000
+    TabOrder = 4
+  end
+  object Button1: TButton
+    Position.X = 126.000000000000000000
+    Position.Y = 328.000000000000000000
+    TabOrder = 5
+    Text = 'Button1'
+    OnClick = Button1Click
   end
 end

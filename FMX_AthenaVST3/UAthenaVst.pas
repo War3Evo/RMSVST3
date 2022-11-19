@@ -108,10 +108,16 @@ end;
 
 procedure TAthenaVSTPlugin.OnEditOpen;
 begin
+  WriteLog('TAthenaVSTPlugin.OnEditOpen START');
   ResendParameters;
+  WriteLog('AFTER:ResendParameters;');
   TFormAthenaVST(EditorForm).HostUpdateParameter:=DoUpdateHostParameter;
+  WriteLog('AFTER:.HostUpdateParameter:=DoUpdateHostParameter');
   TFormAthenaVST(EditorForm).HostKeyEvent:=DoKeyEvent;
+  WriteLog('AFTER:.HostKeyEvent:=DoKeyEvent');
   TFormAthenaVST(EditorForm).HostPrgmChange:=DoProgramChange;
+  WriteLog('AFTER:.HostPrgmChange:=DoProgramChange');
+  WriteLog('TAthenaVSTPlugin.OnEditOpen END');
 end;
 
 procedure TAthenaVSTPlugin.onKeyEvent(key:integer;_on:boolean); // from Host
@@ -139,7 +145,9 @@ end;
 
 procedure TAthenaVSTPlugin.UpdateEditorParameter(id: integer;  value: double);
 begin
+  WriteLog('UAthenaVst TAthenaVSTPlugin.UpdateEditorParameter START');
   TFormAthenaVST(EditorForm).UpdateEditorParameter(id,value);
+  WriteLog('UAthenaVst TAthenaVSTPlugin.UpdateEditorParameter END');
 end;
 
 const UID_CAthenaVSTPlugin: TGUID = '{4be90c10-36f7-46f2-b666-076a0f8bdca7}';     //unique TGUID??   OLD: '{4be90c10-36f7-46f2-b931-076a0f8bdca7}'

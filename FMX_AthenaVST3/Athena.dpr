@@ -1,4 +1,29 @@
+// "defaults" are stated as Delphi defaults and not defaults for VST3
+// *** = changes from default
+{$WRITEABLECONST OFF}         // default off
+{$LONGSTRINGS ON}             // default on
+{$TYPEDADDRESS OFF}           // default off
+{$OPENSTRINGS ON}             // default on
+{$EXTENDEDSYNTAX ON}          // default on
+{$BOOLEVAL OFF}               // default off
+{$VARSTRINGCHECKS OFF}        // default on ***
+{$OPTIMIZATION ON}            // default on
+// In the {$A8} or {$A+} state, fields in record types that are declared
+// without the packed modifier and fields in class structures are aligned on quadword boundaries.
+{$A+}                         // default {$A8} {$ALIGN 8} ???
+{$STACKFRAMES OFF}            // default off
+{$U-}                         // default {$U-}
+{$RANGECHECKS OFF}            // default off
+{$IOCHECKS OFF}               // default on ***
+{$OVERFLOWCHECKS OFF}         // default off
+{$DEBUGINFO OFF}              // default on ***
+{$LOCALSYMBOLS OFF}           // default on ***
+{$Y-}                         // default {$YD} {$DEFINITIONINFO ON} ***
+{$ASSERTIONS OFF}             // default on ***
+
 library Athena;
+
+{$E vst3}
 
 { Important note about DLL memory management: ShareMem must be the
   first unit in your library's USES clause AND your project's (select
@@ -30,10 +55,30 @@ uses
   UCPlugView in 'VST3SDK\UCPlugView.pas',
   UAthenaVst in 'UAthenaVst.pas',
   UAthenaVstDSP in 'UAthenaVstDSP.pas',
-  UAthenaVSTForm in 'UAthenaVSTForm.pas' {Form1},
+  UAthenaVSTForm in 'UAthenaVSTForm.pas' {FormAthenaVST},
   UPianoKeyboard in 'PianoComponent_Install\UPianoKeyboard.pas';
 
 {$R *.res}
+
+function InitDLL:boolean; cdecl; export;
+begin
+ Result := true;
+end;
+
+function ExitDLL:boolean; cdecl; export;
+begin
+ Result := true;
+end;
+
+function GetPluginFactory: pointer;stdcall; export;
+begin
+  result:=CreatePlugin(GetVSTInstrumentInfo);
+end;
+
+exports
+  InitDLL name 'InitDLL',
+  ExitDLL name 'ExitDLL',
+  GetPluginFactory name 'GetPluginFactory';
 
 begin
 end.

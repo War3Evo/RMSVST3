@@ -25,11 +25,7 @@ type
                               vst3id:TGUID;
                               vst2id:string; // must be 4 characters;
                               cl  : TVSTInstrumentClass;
-{$IFDEF MSWINDOWS}
-                              ecl :  TWinControl;  // was TForm
-{$ELSE}
-                              ecl :  TForm;
-{$ENDIF}
+                              ecl :  TFormClass; //TFormClass
                               name:string;
                               isSynth,softMidiThru:boolean;
                             end;
