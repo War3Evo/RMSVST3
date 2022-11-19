@@ -1,5 +1,10 @@
 # Delphi 11.0 (FMX_Athena)
 
+## 11/19/2022
+- https://en.delphipraxis.net/topic/7856-why-is-fscrollbarsisbvaluesnum-causing-fmx-to-crash-open-source-vcl-version-doesnt-crash/
+- ^ WriteLog uses CodeSite Express... CakeWalk by BandLabs crashes on FScrollBars[isb].Value:=sNum;
+- ^ The VCL version does not cra﻿sh but also uses FScrollBars[isb].Position:=round(100*value); 
+
 ## 11/16/2022
 - Still converting Athena to FMX
 
