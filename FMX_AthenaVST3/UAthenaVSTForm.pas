@@ -38,7 +38,7 @@ type
     { property } HostKeyEvent: THostKeyEvent;
     { property } HostUpdateParameter:THostUpdateParameter;
     { property } HostPrgmChange:THostPrgmChange;
-    procedure UpdateEditorParameter(index:integer;value: double);
+    procedure UpdateEditorParameter(index:integer; dvalue: double);
     procedure SetProgram(prgm:integer);
     procedure SetKey(key:integer;_on:boolean);
   end;
@@ -57,7 +57,6 @@ begin
 end;
 
 procedure TFormAthenaVST.FormCreate(Sender: TObject);
-VAR isb:integer;
 begin
   //Fkeyboard:=TRMCKeyboard.Create(self);
   //Fkeyboard.Parent:=self;
@@ -146,18 +145,23 @@ begin
   //Label2.Caption:='Program:'+prgm.toString;
 end;
 
-procedure TFormAthenaVST.UpdateEditorParameter(index:integer;value: double);
+procedure TFormAthenaVST.UpdateEditorParameter(index:integer; dvalue: double);
 VAR isb:integer;
     sNum:single;
 begin
-  WriteLog('TFormAthenaVST.UpdateEditorParameter(index:' + index.ToString + ' value:' + value.ToString);
+  WriteLog('TFormAthenaVST.UpdateEditorParameter(index:' + index.ToString + ' dvalue:' + dvalue.ToString);
   for isb:=0 to 2 do
     if index = ID_CUTOFF+isb then
       begin
-        WriteLog('FScrollBars[' + isb.ToString + '].Value:=round(100*value)');
-        sNum := round(100*value);
+        WriteLog('FScrollBars[' + isb.ToString + '].Value:=(100*value)');
+        //sNum := round(100*dvalue);
+        sNum := 100*dvalue;
+        WriteLog('FScrollBars[isb].BeginUpdate');
+        FScrollBars[isb].BeginUpdate;
         WriteLog('sNum = ' + sNum.ToString);
         FScrollBars[isb].Value:=sNum;
+        WriteLog('FScrollBars[isb].EndUpdate');
+        FScrollBars[isb].EndUpdate;
         WriteLog('AFTER FScrollBars[isb].Value:=sNum;');
       end;
   WriteLog('TFormAthenaVST.UpdateEditorParameter END');

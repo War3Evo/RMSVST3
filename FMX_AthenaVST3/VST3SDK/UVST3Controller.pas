@@ -119,7 +119,7 @@ type TVST3Parameter  = record
         procedure OnEditOpen;virtual;
         procedure OnEditClose;virtual;
         procedure OnEditIdle;virtual;
-        procedure UpdateEditorParameter(id:integer;value:double);virtual;
+        procedure UpdateEditorParameter(id:integer; dvalue:double);virtual;
         procedure OnInitialize;virtual;
         procedure OnFinalize;virtual;
         procedure DoMidiEvent(byte0, byte1, byte2: integer);
@@ -541,7 +541,7 @@ begin
       FreeAndNIL(FidlEtimer);
 end;
 
-procedure TVST3Controller.UpdateEditorParameter(id: integer;  value: double);
+procedure TVST3Controller.UpdateEditorParameter(id: integer;  dvalue: double);
 begin
 // virtual;
 end;

@@ -26,7 +26,7 @@ protected
   procedure Process32(samples,channels:integer;inputp, outputp: PPSingle);override;
   procedure UpdateProcessorParameter(id:integer;value:double);override;
   procedure OnInitialize;override;
-  procedure UpdateEditorParameter(id:integer;value:double);override;
+  procedure UpdateEditorParameter(id:integer;dvalue:double);override;
   procedure OnEditOpen;override;
   procedure OnProgramChange(prgm:integer);override;
   procedure OnMidiEvent(byte0, byte1, byte2: integer);override;
@@ -143,10 +143,10 @@ begin
   DoMidiEvent(MIDI_CC,id,round(127*value));   // just a test
 end;
 
-procedure TAthenaVSTPlugin.UpdateEditorParameter(id: integer;  value: double);
+procedure TAthenaVSTPlugin.UpdateEditorParameter(id: integer;  dvalue: double);
 begin
   WriteLog('UAthenaVst TAthenaVSTPlugin.UpdateEditorParameter START');
-  TFormAthenaVST(EditorForm).UpdateEditorParameter(id,value);
+  TFormAthenaVST(EditorForm).UpdateEditorParameter(id,dvalue);
   WriteLog('UAthenaVst TAthenaVSTPlugin.UpdateEditorParameter END');
 end;
 

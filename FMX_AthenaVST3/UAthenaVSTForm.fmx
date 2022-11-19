@@ -7,6 +7,8 @@ object FormAthenaVST: TFormAthenaVST
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnShow = FormShow
   DesignerMasterStyle = 0
   object FKeyboard: TRMCKeyboard
     Octaves = 3
