@@ -344,6 +344,7 @@ begin
     }
     WriteLog('FeditorFormClass <> NIL');
     result:=FeditorFormClass.Create(NIL);  // could try "Application"
+    FeditorFormClass.InitInstance()
     WriteLog('AFTER:FeditorFormClass.Create(Application);');
     //result:=FeditorFormClass;   //CreateParented(HWND(parent));
   end;

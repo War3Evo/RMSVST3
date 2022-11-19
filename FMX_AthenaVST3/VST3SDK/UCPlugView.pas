@@ -99,6 +99,8 @@ end;
 function CPlugView.CanResize: TResult;
 begin
   //WriteLog('CPlugView.CanResize');   // this can Log SPAM // turn on at own risk
+  if FeditorForm<>NIL then
+    FEditorForm.Invalidate;
   result:=kResultFalse;    // was kResultOk kResultFalse
 end;
 

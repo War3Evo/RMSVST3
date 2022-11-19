@@ -149,22 +149,22 @@ procedure TFormAthenaVST.UpdateEditorParameter(index:integer; dvalue: double);
 VAR isb:integer;
     sNum:single;
 begin
-  WriteLog('TFormAthenaVST.UpdateEditorParameter(index:' + index.ToString + ' dvalue:' + dvalue.ToString);
+  //WriteLog('TFormAthenaVST.UpdateEditorParameter(index:' + index.ToString + ' dvalue:' + dvalue.ToString);
   for isb:=0 to 2 do
     if index = ID_CUTOFF+isb then
       begin
-        WriteLog('FScrollBars[' + isb.ToString + '].Value:=(100*value)');
+        //WriteLog('FScrollBars[' + isb.ToString + '].Value:=(100*value)');
         //sNum := round(100*dvalue);
         sNum := 100*dvalue;
-        WriteLog('FScrollBars[isb].BeginUpdate');
-        FScrollBars[isb].BeginUpdate;
-        WriteLog('sNum = ' + sNum.ToString);
+        //WriteLog('FScrollBars[isb].BeginUpdate');
+        //FScrollBars[isb].BeginUpdate;
+        //WriteLog('sNum = ' + sNum.ToString);
         FScrollBars[isb].Value:=sNum;
-        WriteLog('FScrollBars[isb].EndUpdate');
-        FScrollBars[isb].EndUpdate;
-        WriteLog('AFTER FScrollBars[isb].Value:=sNum;');
+        //WriteLog('FScrollBars[isb].EndUpdate');
+        //FScrollBars[isb].EndUpdate;
+        //WriteLog('AFTER FScrollBars[isb].Value:=sNum;');
       end;
-  WriteLog('TFormAthenaVST.UpdateEditorParameter END');
+  //WriteLog('TFormAthenaVST.UpdateEditorParameter END');
 end;
 
 end.

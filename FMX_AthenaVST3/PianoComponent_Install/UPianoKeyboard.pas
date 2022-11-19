@@ -87,6 +87,7 @@ begin
   if assigned(FOnKeyEvent) then
     FOnKeyEvent(self,key+LowerKey,_on,infinite and _on);
   //Invalidate;
+  InvalidateRect(RectF(0,0,width,height));
 end;
 
 procedure TRMCKeyboard.SetKeyPressed(key: integer; _on: boolean);      // highlight key pressed
@@ -96,6 +97,7 @@ begin
   begin
     FSelected[key]:=_on;
     //Invalidate;
+    InvalidateRect(RectF(0,0,width,height));
   end;
 end;
 
@@ -124,6 +126,7 @@ begin
     FLastKey:=key;
     if FDown then SetKey(FLastKey,true);
     //Invalidate;
+    InvalidateRect(RectF(0,0,width,height));
   end;
 end;
 
@@ -265,6 +268,7 @@ begin
   setLength(FSelected,12*FOctaves+1);
   for i:=0 to 12*FOctaves do FSelected[i]:=false;
   //Invalidate;
+  InvalidateRect(RectF(0,0,width,height));
 end;
 
 end.
