@@ -4,9 +4,12 @@ interface
 
 uses
 {$IFDEF MSWINDOWS}
+      // may need to free and nil MyWinControl ??
+
       //FMX.Platform.Win,
       FMX.Controls.Win,
       FMX.Platform.Win,
+      //Winapi.Windows,
 {$ENDIF}
       FMX.Forms, UVST3Processor, Vst3Base, UVSTBase, UCDataLayer,
       System.Generics.Collections, FMX.ExtCtrls, System.Types, FMX.Types;
@@ -344,7 +347,8 @@ begin
     }
     WriteLog('FeditorFormClass <> NIL');
     result:=FeditorFormClass.Create(NIL);  // could try "Application"
-    FeditorFormClass.InitInstance()
+    //WriteLog('MyWinControl.CreateParented(HWND(parent))');
+    //MyWinControl.CreateParented(HWND(parent));
     WriteLog('AFTER:FeditorFormClass.Create(Application);');
     //result:=FeditorFormClass;   //CreateParented(HWND(parent));
   end;
