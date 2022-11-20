@@ -1,5 +1,14 @@
 # Delphi 11.0 (FMX_Athena)
 
+## 11/20/2022
+- I have HALTED working on this VCL to FMX as I hit a wall and can't figure it out.
+- During my conversion from VCL to FMX... I found a problem I can't solve, so that being said.
+I'm going back to the VCL version so that I can work on plug-ins, instead of working to try and
+figure a work around that is above my head.  Someone mentioned using CreateWindowEX to do it, 
+but I can't wrap my brain around on how to do that when you creating the form already?
+can't seem to find a work around VCL CreateParented for unit UVST3Controller;
+in function TVST3Controller.CreateForm(parent:pointer):TForm;
+
 ## 11/19/2022
 - https://en.delphipraxis.net/topic/7856-why-is-fscrollbarsisbvaluesnum-causing-fmx-to-crash-open-source-vcl-version-doesnt-crash/
 - ^ WriteLog uses CodeSite Express... CakeWalk by BandLabs crashes on FScrollBars[isb].Value:=sNum;
