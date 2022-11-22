@@ -20,6 +20,7 @@ type
     Button1: TButton;
     procedure ScrollBar1Change(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure InitializeNewForm; override;
     procedure Button1Click(Sender: TObject);
     procedure FkeyboardKeyEvent(Sender: TObject; key: Integer; _on,
       infinite: Boolean);
@@ -56,8 +57,15 @@ begin
   WriteLog('FkeyboardKeyEvent Key = ' + key.ToString);
 end;
 
+procedure TFormAthenaVST.InitializeNewForm;
+begin
+  WriteLog('TFormAthenaVST.InitializeNewForm');
+  BorderStyle := TFmxFormBorderStyle.Sizeable;
+end;
+
 procedure TFormAthenaVST.FormCreate(Sender: TObject);
 begin
+  WriteLog('TFormAthenaVST.FormCreate');
   //Fkeyboard:=TRMCKeyboard.Create(self);
   //Fkeyboard.Parent:=self;
   //Fkeyboard.Align:=Top;    //was alBottom
@@ -70,6 +78,7 @@ end;
 
 procedure TFormAthenaVST.FormShow(Sender: TObject);
 begin
+  WriteLog('TFormAthenaVST.FormShow');
   //if FileExists('athena.json') then
     //SkAnimatedImage1.LoadFromFile('athena.json');
 end;

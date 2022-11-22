@@ -74,14 +74,20 @@ begin
       WriteLog('AFTER:FeditorForm:=IVST3.CreateForm(parent)');
     end;
   if FeditorForm<>NIL then
-    FEditorForm.Invalidate;  //InvalidateRect(ARect);
+    begin
+      WriteLog('BEFORE:if FeditorForm<>NIL then Invalidate');
+      FEditorForm.Invalidate;  //InvalidateRect(ARect);
+      WriteLog('BEFORE:if FeditorForm<>NIL then Invalidate');
+    end;
   with FEditorForm do
   begin
     Visible := True;
     //BorderStyle := None;
     //SetBounds(0, 0, Round(Width), Round(Height));
     //ARect.left:= 0; ARect.top:= 0; ARect.right:= Width; ARect.bottom:= Height;
+    WriteLog('BEFORE:with FEditorForm do Invalidate');
     Invalidate;
+    WriteLog('BEFORE:with FEditorForm do Invalidate');
   end;
   WriteLog('BEFORE:IVST3.EditOpen(FEditorForm)');
   IVST3.EditOpen(FEditorForm);
