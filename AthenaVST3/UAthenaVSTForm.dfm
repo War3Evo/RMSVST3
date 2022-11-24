@@ -117,7 +117,7 @@ object FormAthenaVST: TFormAthenaVST
     Top = 0
     Width = 1100
     Height = 106
-    Octaves = 3
+    Octaves = 4
     Align = alTop
   end
 end
