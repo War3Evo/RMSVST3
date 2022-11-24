@@ -13,6 +13,7 @@ object FormAthenaVST: TFormAthenaVST
   Font.Style = []
   Scaled = False
   OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 120
   TextHeight = 16
   object Label1: TLabel
@@ -55,18 +56,6 @@ object FormAthenaVST: TFormAthenaVST
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
-  end
-  object Fkeyboard: TRMCKeyboard
-    Left = 0
-    Top = 0
-    Width = 1100
-    Height = 106
-    OnKeyEvent = FkeyboardKeyEvent
-    Octaves = 5
-    Align = alTop
-    ExplicitLeft = 64
-    ExplicitTop = 96
-    ExplicitWidth = 665
   end
   object Label6: TLabel
     Left = 480
@@ -114,13 +103,21 @@ object FormAthenaVST: TFormAthenaVST
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 160
-    Top = 232
+    Left = 664
+    Top = 240
     Width = 177
     Height = 129
     Caption = 'C Chord'
     TabOrder = 4
     OnMouseDown = Button2MouseDown
     OnMouseUp = Button2MouseUp
+  end
+  object FKeyboard: TRMCKeyboardVCL
+    Left = 0
+    Top = 0
+    Width = 1100
+    Height = 106
+    Octaves = 3
+    Align = alTop
   end
 end

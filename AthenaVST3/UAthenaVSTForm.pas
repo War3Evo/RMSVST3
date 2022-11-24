@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
-  UAthenaVST, UPianoKeyboard, ULogger;
+  UAthenaVST, UPianoKeyboardVCL, ULogger, Vcl.ExtCtrls; //, Xml.Win.msxmldom; ???
 
 type
   THostKeyEvent = procedure (key:integer;_on:boolean) of object;
@@ -22,9 +22,9 @@ type
     ScrollBar3: TScrollBar;
     Button1: TButton;
     Label5: TLabel;
-    Fkeyboard: TRMCKeyboard;
     Label6: TLabel;
     Button2: TButton;
+    Fkeyboard: TRMCKeyboardVCL;
     procedure ScrollBar1Change(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -34,10 +34,10 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure Button2MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     FScrollBars:array[0..2] of TScrollBar;
-    //Fkeyboard:TRMCKeyboard;
     procedure CBOnKeyEvent(Sender: TObject; key: integer; _on, infinite: boolean);
   public
     { Public declarations }
@@ -72,6 +72,12 @@ begin
   FScrollBars[1]:=ScrollBar2;
   FScrollBars[2]:=ScrollBar3;
   Fkeyboard.OnKeyEvent:=CBOnKeyEvent;
+end;
+
+procedure TFormAthenaVST.FormShow(Sender: TObject);
+begin
+  //if FileExists('athena.json') then
+    //SkAnimatedImage1.LoadFromFile('athena.json');
 end;
 
 procedure TFormAthenaVST.ScrollBar1Change(Sender: TObject);

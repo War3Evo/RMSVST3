@@ -304,6 +304,7 @@ end;
 function TVST3Controller.CreateForm(parent:pointer):TForm;
 VAR FeditorFormClass:TFormClass;
 begin
+  fFinalized := false;
   FeditorFormClass:=GetEditorClass;
   if FeditorFormClass = NIL then FeditorFormClass:=GetPluginInfo.PluginDef.ecl;
   if FeditorFormClass = NIL then result:=NIL

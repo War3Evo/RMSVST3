@@ -13,8 +13,7 @@ procedure WriteLog(s:string);
 
 implementation
 
-uses Windows, System.IOUtils, Classes, SysUtils, CodeSiteLogging;       // Not everyone has CodeSiteLogging -- working on a way to make this optional
-                                                                        // for now, if you get this... just comment it out if you don't have CodeSiteLogging
+uses Windows, System.IOUtils, Classes, SysUtils, CodeSiteLogging;
 
 // Comment this below out if you don't have CodeSiteLogging:
 VAR FlastCheck:Int64;

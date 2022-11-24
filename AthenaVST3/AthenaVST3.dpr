@@ -22,7 +22,7 @@ uses
   UAthenaVst in 'UAthenaVst.pas',
   UAthenaVstDSP in 'UAthenaVstDSP.pas',
   UAthenaVSTForm in 'UAthenaVSTForm.pas' {FormAthenaVST},
-  UPianoKeyboard in 'UPianoKeyboard.pas';
+  UPianoKeyboardVCL in 'UPianoKeyboardVCL_Component_Install\UPianoKeyboardVCL.pas';
 
 function InitDLL:boolean; cdecl; export;
 begin
